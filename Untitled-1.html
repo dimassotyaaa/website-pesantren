@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Lokasi Bangunan Pondok Pesantren Al-Munawwir</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/img/masjid dimas.jpeg" />
+    <!-- Core theme CSS -->
+    <link href="css/styles.css" rel="stylesheet" />
+    <!-- Mapbox CSS -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
+    <!-- Mapbox Directions Plugin -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.3.1/mapbox-gl-directions.js"></script>
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.3.1/mapbox-gl-directions.css">
+    <style>
+        body {
+            font-family: Poppins, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            position: relative;
+            width: 95%;
+            height: 85vh;
+            margin: auto;
+        }
+        .legend {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            left: 10px;
+            bottom: 30px;
+        }
+        #fly {
+            position: relative;
+            margin: 10px auto;
+            display: block;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-light" style="background: #146855; color: #fff;">
+        <div class="container">
+            <a class="navbar-brand text-white" href="#">Pondok Pesantren Al-Munawwir</a>
+        </div>
+    </nav>
+    <!-- Header -->
+    <header class="bg-image text-center text-white py-4" style="background-color: #146855;">
+        <h1>Lokasi Bangunan Pondok Pesantren Al-Munawwir</h1>
+    </header>
+    <!-- Map -->
+    <main class="container mt-4">
+        <div id="map"></div>
+        <button id="fly">Lokasi Pesantren</button>
+        <div class="legend">
+            <h6>Legenda</h6>
+            <div><span style="background-color: #1e3d59; width: 10px; height: 10px; display: inline-block;"></span> Asrama Putra</div>
+            <div><span style="background-color: #ff6e40; width: 10px; height: 10px; display: inline-block;"></span> Asrama Putri</div>
+            <div><span style="background-color: #ffc13b; width: 10px; height: 10px; display: inline-block;"></span> Bangunan Umum</div>
+        </div>
+    </main>
+    <!-- Mapbox Script -->
+    <script>
+        mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN'; // Ganti dengan token Mapbox Anda
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [110.361049, -7.82565],
+            zoom: 17
+        });
+
+        map.on('load', () => {
+            map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+            map.addControl(
+                new MapboxDirections({ accessToken: mapboxgl.accessToken }),
+                'top-right'
+            );
+            // Tambahkan GeoJSON
+            map.addSource('asrama_putra', {
+                type: 'geojson',
+                data: 'assets/geojson/asrama_putra.geojson'
+            });
+            map.addLayer({
+                id: 'asrama_putra',
+                type: 'fill',
+                source: 'asrama_putra',
+                paint: { 'fill-color': '#1e3d59', 'fill-opacity': 0.7 }
+            });
+        });
+
+        // Tombol Fly To
+        document.getElementById('fly').addEventListener('click', () => {
+            map.flyTo({
+                center: [110.36074007330723, -7.825577818701996],
+                zoom: 17,
+                duration: 2000
+            });
+        });
+    </script>
+</body>
+</html>
